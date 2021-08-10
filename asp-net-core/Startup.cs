@@ -29,6 +29,7 @@ namespace asp_net_core
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
             services.AddControllers();
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "asp_net_core", Version = "v1" });
@@ -47,8 +48,9 @@ namespace asp_net_core
 
             app.UseHttpsRedirection();
 
+            app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
             app.UseRouting();
-
+      
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
