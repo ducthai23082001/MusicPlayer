@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Observable, Observer } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -7,21 +8,45 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'angular';
-  students;
-  student;
-  constructor(private http: HttpClient){
+  @ViewChild('audioOption') audioPlayerRef: ElementRef;
+  start = 10;
+  listSongs;
+  title: string;
+  musicLink: Observable<string>;
+  constructor(private http: HttpClient) {
 
   }
-  ngOnInit(){
-    this.getStudent();
+  ngOnInit() {
+    this.getSongs();
+    setTimeout(() => {
+      this.getLink(this.start)
+      // console.log(111)
+    }, 2500);
   }
 
-  getStudent(){
-    this.http.get("https://localhost:5001/api/student").subscribe(result => {
-      this.students = result;
-      this.student = this.students[0]
-      console.log(this.students)
-    })
+  getSongs() {
+    this.http.get("https://api.apify.com/v2/key-value-stores/EJ3Ppyr2t73Ifit64/records/LATEST?fbclid=IwAR2kwy2vtkNxYdtl4uWO4tyUI5-KbxApT_XNLxptaU-lu5Gl30V6p2Gh2n0").subscribe(res => this.listSongs = res)
+  }
+
+  getLink(song: number) {
+    if(song < 10) song = 10;
+    this.musicLink = this.listSongs.songs.top100_VN[0].songs[song].music; //URL
+    this.title = this.listSongs.songs.top100_VN[0].songs[song].title;
+  }
+
+  nextSong() {
+    this.start++;
+    this.getLink(this.start);
+    this.audioPlayerRef.nativeElement.src = this.musicLink;
+    this.audioPlayerRef.nativeElement.load();
+    this.audioPlayerRef.nativeElement.play();
+  }
+
+  previousSong(){
+    this.start--;
+    this.getLink(this.start);
+    this.audioPlayerRef.nativeElement.src = this.musicLink;
+    this.audioPlayerRef.nativeElement.load();
+    this.audioPlayerRef.nativeElement.play();
   }
 }
