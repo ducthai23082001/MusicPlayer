@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable, Observer, Subject } from 'rxjs';
 import { ExtentionsService } from './_services/extentions.service';
 
 @Component({
@@ -10,10 +12,11 @@ import { ExtentionsService } from './_services/extentions.service';
 export class AppComponent implements OnInit {
   @ViewChild('audioOption') audioPlayerRef: ElementRef;
   @ViewChild('main') main: ElementRef;
-  onScroll(event) {
-    console.log(event);
-  }
+  @ViewChild('img') image: ElementRef;
+
+  isLoading = true;
   curentSeconds: number = 0;
+  imgElement;
   start = 0;
   test;
   isPlaying: boolean = false;
@@ -25,18 +28,37 @@ export class AppComponent implements OnInit {
   secondsTime = this.curentSeconds - this.minutesTime * 60;
   baseUrl = "https://api.mp3.zing.vn/api/streaming/audio/";
   musicLink;
-  constructor(private http: HttpClient, private extentionsService: ExtentionsService) { }
+  constructor(
+    private http: HttpClient,
+    private extentionsService: ExtentionsService,
+    private store: AngularFirestore) { }
+
   ngOnInit() {
-    this.getListSongs();
+    let loading = setInterval(()=>{
+      if(!this.isLoading) clearInterval(loading);
+    },1)
+
     setTimeout(() => {
       this.getLink(this.start)
-    }, 1800);
+    }, 2000);
+    setTimeout(() => {
+      this.isLoading = false;
+      this.imgElement = this.image?.nativeElement;
+      if (!this.isPlaying) {
+        this.imgElement.style.animationPlayState = "paused";
+      }
+    }, 2001);
+    this.getListSongs();
     this.currentTime = this.extentionsService.convertSecondToMinute(0);
   }
   //Get list songs from API
 
 
   //Controls
+  onScroll(event) {
+    console.log(event);
+  }
+
   nextSong() {
     this.start++;
     this.updateSong();
@@ -54,9 +76,11 @@ export class AppComponent implements OnInit {
       this.audioPlayerRef.nativeElement.pause();
       clearInterval(this.test);
       this.currentTime = this.extentionsService.convertSecondToMinute(Math.floor(this.curentSeconds));
+      this.imgElement.style.animationPlayState = "paused"
     }
     else {
       this.audioPlayerRef.nativeElement.play();
+      this.imgElement.style.animationPlayState = "running"
       this.raiseTime();
     }
   }
@@ -73,6 +97,7 @@ export class AppComponent implements OnInit {
 
   onChangeInput() {
     this.audioPlayerRef.nativeElement.currentTime = this.curentSeconds;
+    this.currentTime = this.extentionsService.convertSecondToMinute(this.curentSeconds);
   }
 
   onChangeAudio() {
@@ -98,9 +123,19 @@ export class AppComponent implements OnInit {
     this.curentSeconds = 0;
     this.audioPlayerRef.nativeElement.src = this.musicLink;
     this.audioPlayerRef.nativeElement.load();
+    this.imgElement.style.visibility = "hidden";
+    this.imgElement.style.animationName = "none";
+    setTimeout(() => {
+      this.imgElement.style.visibility = "visible";
+
+    }, 1);
+    setTimeout(() => {
+      this.imgElement.style.animationName = "twirl";
+    }, 800);
     if (this.isPlaying) {
       this.audioPlayerRef.nativeElement.currentTime = 0;
       this.audioPlayerRef.nativeElement.play();
+      this.imgElement.style.animationPlayState = "running";
       this.raiseTime()
     }
   }

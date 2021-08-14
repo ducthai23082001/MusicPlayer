@@ -8,6 +8,9 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import { FormsModule } from '@angular/forms';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from 'src/environments/environment';
+import{AngularFirestoreModule} from '@angular/fire/firestore'
 
 @NgModule({
   declarations: [
@@ -20,6 +23,8 @@ import { FormsModule } from '@angular/forms';
     HttpClientModule,
     BrowserAnimationsModule,
     MatSidenavModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     FormsModule,
     TimeagoModule.forRoot()
   ],

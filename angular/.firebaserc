@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "musicplayer-bfdb3": {
+      "hosting": {
+        "angular": [
+          "musicplayer-bfdb3"
+        ]
+      }
+    }
+  }
+}

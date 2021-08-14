@@ -1,37 +1,39 @@
+<div class="loader" *ngIf="isLoading"></div>
 <div id="main" *ngIf="currentSong" (scroll)="onScroll($event)" #main>
-  <p class="song-name">{{currentSong?.position}}. {{currentSong.title}}</p>
+  <p class="song-name">{{currentSong?.position}}. {{currentSong.title}} - {{currentSong?.artists_names}}</p>
 
-  <div [ngClass]="isPlaying ? 'img' : ''">
-    <img [src]="currentSong?.thumbnail" alt="">
+  <div class = 'img' #img *ngIf="currentSong?.thumbnail">
+    <img [src]="currentSong?.album.thumbnail_medium" alt="">
   </div>
-  <p>{{currentSong?.artists_names}}</p>
-  <div class="controls">
-    <button class="btn" (click)="firstSong()">
-      <i class="fas fa-step-backward"></i>
-    </button>
-    <button class="btn" (click)="previousSong()">
-      <i class="fas fa-caret-left"></i>
-    </button>
-    <button class="btn" (click)="toggle()" *ngIf="isPlaying">
-      <i class="fas fa-pause-circle"></i>
-    </button>
-    <button class="btn" (click)="toggle()" *ngIf="!isPlaying">
-      <i class="fas fa-play-circle"></i>
-    </button>
-    <button class="btn" (click)="nextSong()">
-      <i class="fas fa-caret-right"></i>
-    </button>
-    <button class="btn" (click)="lastSong()">
-      <i class="fas fa-step-forward"></i>
-    </button>
-  </div>
-
   <!-- time -->
   <div id="audio-player-container">
     <p id="current-time" class="time">{{currentTime}}</p>
-    <input type="range" id="seek-slider" [max]="currentSong.duration" value="0" [(ngModel)]="curentSeconds" (change)="onChangeInput()">
+    <input type="range" id="seek-slider" [max]="currentSong.duration" value="0" [(ngModel)]="curentSeconds"
+      (change)="onChangeInput()">
     <p id="duration" class="time">{{duration}}</p>
   </div>
+  <div class="controls">
+    <button (click)="firstSong()">
+      <i class="fas fa-step-backward btn-start"></i>
+    </button>
+    <button (click)="previousSong()">
+      <i class="fas fa-caret-left btn-next"></i>
+    </button>
+    <button (click)="toggle()" *ngIf="isPlaying">
+      <i class="fas fa-pause-circle btn-pause"></i>
+    </button>
+    <button (click)="toggle()" *ngIf="!isPlaying">
+      <i class="fas fa-play-circle btn-play"></i>
+    </button>
+    <button (click)="nextSong()">
+      <i class="fas fa-caret-right btn-next"></i>
+    </button>
+    <button (click)="lastSong()">
+      <i class="fas fa-step-forward btn-end"></i>
+    </button>
+  </div>
+
+
   <audio controls *ngIf="musicLink" #audioOption (ended)="nextSong()">
     <source [src]="musicLink" type="audio/mpeg">
   </audio>
