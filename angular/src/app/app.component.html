@@ -1,7 +1,10 @@
 <div id="main" *ngIf="currentSong" (scroll)="onScroll($event)" #main>
+  <p class="song-name">{{currentSong?.position}}. {{currentSong.title}}</p>
+
   <div [ngClass]="isPlaying ? 'img' : ''">
     <img [src]="currentSong?.thumbnail" alt="">
   </div>
+  <p>{{currentSong?.artists_names}}</p>
   <div class="controls">
     <button class="btn" (click)="firstSong()">
       <i class="fas fa-step-backward"></i>
@@ -22,7 +25,6 @@
       <i class="fas fa-step-forward"></i>
     </button>
   </div>
-  <p>{{currentSong?.position}}. {{currentSong.title}}</p>
 
   <!-- time -->
   <div id="audio-player-container">
@@ -30,7 +32,6 @@
     <input type="range" id="seek-slider" [max]="currentSong.duration" value="0" [(ngModel)]="curentSeconds" (change)="onChangeInput()">
     <p id="duration" class="time">{{duration}}</p>
   </div>
-
   <audio controls *ngIf="musicLink" #audioOption (ended)="nextSong()">
     <source [src]="musicLink" type="audio/mpeg">
   </audio>
