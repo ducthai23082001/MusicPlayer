@@ -20,4 +20,10 @@ export class ExtentionsService {
   str_pad_left(string, pad, length) {
     return (new Array(length + 1).join(pad) + string).slice(-length);
   }
+
+  getTranslateY(element) : number{
+    let style = window.getComputedStyle(element);
+    let matrix = new WebKitCSSMatrix(style.transform)
+    return matrix.m41;
+  }
 }

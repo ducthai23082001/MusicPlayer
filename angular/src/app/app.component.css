@@ -37,18 +37,23 @@
   display: none;
 }
 
-.controls {
+.song-name {
+  margin: 0;
+  padding: 0;
+}
+
+.song-name,
+.artist-name {
+  text-align: center;
+}
+.controls-button {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  bottom: 30px;
   width: 100%;
   max-height: 52px;
-  position: relative;
-  bottom: -35px;
   background-color: #fbab7e;
   background-image: linear-gradient(62deg, #fbab7e 0%, #f7ce68 100%);
-  box-shadow: rgba(100, 100, 111, 0.4) 0px 7px 29px 0px;
 }
 
 audio {
@@ -57,7 +62,7 @@ audio {
 }
 
 div img {
-  height: 180px;
+  height: 216px;
   border-radius: 50%;
   box-shadow: rgba(100, 100, 111, 1) 0px 7px 29px 0px;
 }
@@ -74,15 +79,27 @@ div img {
     transform: rotateZ(360deg);
   }
 }
+.nav {
+  position: fixed;
+  width: inherit;
+  height: 120px;
+  bottom: 0px;
+  transition: 0.5s;
+}
 
-.controls button {
+.controls-button button {
   background: transparent;
   padding: 0;
   transition: 0.15s;
   border: none;
   outline: none;
 }
-.controls button:active {
+
+.icon{
+  color: white !important;
+}
+
+.controls-button button:active {
   color: #fff;
 }
 .btn-next {
@@ -139,11 +156,11 @@ div img {
   --seek-before-width: 0%;
   --volume-before-width: 100%;
   --buffered-width: 0%;
+  transform: translateY(-30px);
   display: flex;
   justify-content: space-around;
   align-items: center;
   position: relative;
-  margin-top: 230px;
   width: 100%;
   height: 20px;
   background: transparent;
@@ -209,6 +226,21 @@ input[type="range"]:active::-webkit-slider-thumb {
   transform: scale(1.2);
 }
 
+.list-songs {
+  padding-left: 0;
+  background-color: #85ffbd;
+  background-image: linear-gradient(45deg, #85ffbd 0%, #fffb7d 100%);
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  line-height: 50px;
+  overflow: scroll;
+}
+
+.list-songs li{
+  margin: 10px 0;
+}
+
 /* responsive */
 /* @media only screen and (max-width: 321px) {
   #main{
@@ -238,7 +270,8 @@ input[type="range"]:active::-webkit-slider-thumb {
     border-radius: 0;
   }
   .song-name {
-    padding-bottom: 20px;
+    margin: 0;
+    padding: 0;
   }
 }
 
